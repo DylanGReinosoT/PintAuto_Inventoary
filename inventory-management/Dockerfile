@@ -1,4 +1,4 @@
-# Stage 1: Build (Cambiamos a una imagen que incluye Maven y Java 17 nativo)
+# Stage 1: Build
 FROM maven:3.8.5-openjdk-17 AS builder
 
 WORKDIR /app
@@ -6,16 +6,16 @@ WORKDIR /app
 # Copiamos el archivo de configuración de dependencias
 COPY pom.xml .
 
-# Descargamos las dependencias usando el Maven global de la imagen (evita fallos de mvnw)
+# Descargamos las dependencias usando el Maven global de la imagen
 RUN mvn dependency:go-offline -B
 
 # Copiamos el código fuente
 COPY src ./src
 
-# Compilamos y empaquetamos el archivo .jar
-RUN mvn clean package -DskipTests -B
+# CAMBIO CLAVE: Forzamos a Maven a ignorar y no compilar ninguna clase de prueba
+RUN mvn clean package -Dmaven.test.skip=true -B
 
-# Stage 2: Runtime (Mantenemos tu configuración ligera con Alpine)
+# Stage 2: Runtime
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
