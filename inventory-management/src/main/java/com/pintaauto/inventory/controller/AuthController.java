@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+// CORRECCIÓN SEGURO: Usamos originPatterns con http* para validar credenciales globalmente
+@CrossOrigin(originPatterns = "http*")
 public class AuthController {
 
     @Autowired
