@@ -15,23 +15,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
-// CORRECCIÓN: Permitimos tanto tu entorno local como la URL oficial de Vercel (sin barras diagonales al final)
-@CrossOrigin(origins = { "http://localhost:5173", "https://pint-auto-inventoary.vercel.app" })
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
-    /**
-     * Endpoint de login
-     */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponseDTO>> login(
             @Valid @RequestBody LoginRequestDTO loginRequest,
-            @BindingResult bindingResult) {
+            BindingResult bindingResult) {
 
         try {
-            // Validar errores de validación
             if (bindingResult.hasErrors()) {
                 String errores = bindingResult.getFieldErrors().stream()
                         .map(error -> error.getDefaultMessage())
@@ -54,9 +49,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Endpoint para verificar el estado del token
-     */
     @GetMapping("/verify")
     public ResponseEntity<ApiResponse<String>> verifyToken() {
         return ResponseEntity.ok(
