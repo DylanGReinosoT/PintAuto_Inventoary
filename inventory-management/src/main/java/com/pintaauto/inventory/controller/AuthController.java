@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173") // Agregar temporalmente para debugging
+// CORRECCIÓN: Permitimos tanto tu entorno local como la URL oficial de Vercel (sin barras diagonales al final)
+@CrossOrigin(origins = { "http://localhost:5173", "https://pint-auto-inventoary.vercel.app" })
 public class AuthController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponseDTO>> login(
             @Valid @RequestBody LoginRequestDTO loginRequest,
-            BindingResult bindingResult) {
+            @BindingResult bindingResult) {
 
         try {
             // Validar errores de validación
